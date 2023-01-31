@@ -34,7 +34,11 @@ public class AList<Item> {
     /** Inserts X into the back of the list. */
     public void addLast(Item x) {
         if (size == items.length) {
+<<<<<<< HEAD
             resize(size + 1); // TODO: Change the resize strategy
+=======
+            resize(size + 1);
+>>>>>>> 54bcede (added lab03 skeleton)
         }
 
         items[size] = x;

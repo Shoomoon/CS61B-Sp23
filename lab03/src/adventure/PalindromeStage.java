@@ -40,8 +40,18 @@ public class PalindromeStage implements AdventureStage {
             }
 
             IntList numLst = digitsToIntList(input);
+<<<<<<< HEAD
             IntList reversedLst = reverseList(numLst);
 
+=======
+            IntList reversedLst = null;
+            // Uncomment the following line if you are working through the optional section
+            // reversedLst = reverseList(numLst);
+
+            if (reversedLst == null) {
+                break;
+            }
+>>>>>>> 54bcede (added lab03 skeleton)
             if (numLst.equals(reversedLst)) {
                 System.out.println("Wow, nice room number!");
                 break;
@@ -64,7 +74,11 @@ public class PalindromeStage implements AdventureStage {
     /** Returns a new IntList with the contents of the original IntList in reverse order.*/
     private static IntList reverseList(IntList l) {
         IntList reversed = null;
+<<<<<<< HEAD
         while (l.rest != null) {
+=======
+        while (l != null) {
+>>>>>>> 54bcede (added lab03 skeleton)
             reversed = new IntList(l.first, reversed);
             l = l.rest;
         }
@@ -77,8 +91,13 @@ public class PalindromeStage implements AdventureStage {
      */
     private static IntList digitsToIntList(String s) {
         int[] a = new int[s.length()];
+<<<<<<< HEAD
         for (int i = s.length(); i > 0; i++) {
             a[s.length() - i] = Character.getNumericValue(s.charAt(i));
+=======
+        for (int i = s.length(); i > 0; i--) {
+            a[s.length() - i] = Character.getNumericValue(s.charAt(i - 1));
+>>>>>>> 54bcede (added lab03 skeleton)
         }
         return IntList.of(a);
     }
