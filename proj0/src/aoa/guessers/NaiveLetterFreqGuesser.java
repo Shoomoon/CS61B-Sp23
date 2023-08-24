@@ -1,8 +1,12 @@
 package aoa.guessers;
 
 import aoa.utils.FileUtils;
+import edu.princeton.cs.algs4.In;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class NaiveLetterFreqGuesser implements Guesser {
     private final List<String> words;
@@ -21,14 +25,39 @@ public class NaiveLetterFreqGuesser implements Guesser {
      *  This task is similar to something you did in hw0b! */
     public Map<Character, Integer> getFrequencyMap() {
         // TODO: Fill in this method.
-        return null;
+        Map<Character, Integer> res = new HashMap<>();
+        for (String word: words) {
+            for (char c: word.toCharArray()) {
+                res.put(c, res.getOrDefault(c, 0) + 1);
+            }
+        }
+        return res;
     }
 
     /** Returns the most common letter in WORDS that has not yet been guessed
      *  (and therefore isn't present in GUESSES). */
     public char getGuess(List<Character> guesses) {
         // TODO: Fill in this method.
-        return '?';
+        Map<Character, Integer> charsFreq = getFrequencyMap();
+        for (char c: guesses) {
+            charsFreq.remove(c);
+        }
+        if (charsFreq.isEmpty()) {
+            System.out.print("No letters left!");
+        }
+        char mostCommonLetter = '?';
+        int count = 0;
+        for (char c: charsFreq.keySet()) {
+            int currentFreq = charsFreq.get(c);
+            if (currentFreq < count) {
+                continue;
+            }
+            if (currentFreq > count || mostCommonLetter > c) {
+                mostCommonLetter = c;
+                count = currentFreq;
+            }
+        }
+        return mostCommonLetter;
     }
 
     public static void main(String[] args) {
