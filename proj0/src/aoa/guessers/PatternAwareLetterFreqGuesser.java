@@ -23,26 +23,7 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
                 wordsPool.add(word);
             }
         }
-        Map<Character, Integer> charsFreq = getFrequencyMap(wordsPool);
-        for (char c: guesses) {
-            charsFreq.remove(c);
-        }
-        if (charsFreq.isEmpty()) {
-            System.out.print("No letters left!");
-        }
-        char mostCommonLetter = '?';
-        int count = 0;
-        for (char c: charsFreq.keySet()) {
-            int currentFreq = charsFreq.get(c);
-            if (currentFreq < count) {
-                continue;
-            }
-            if (currentFreq > count || mostCommonLetter > c) {
-                mostCommonLetter = c;
-                count = currentFreq;
-            }
-        }
-        return mostCommonLetter;
+        return LFGHelper.getSimpleGuess(wordsPool, guesses);
     }
     private boolean match(String pattern, String target) {
         if (pattern.length() != target.length()) {
@@ -54,16 +35,6 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
             }
         }
         return true;
-    }
-    public Map<Character, Integer> getFrequencyMap(List<String> wordsPool) {
-        // TODO: Fill in this method.
-        Map<Character, Integer> res = new HashMap<>();
-        for (String word: wordsPool) {
-            for (char c: word.toCharArray()) {
-                res.put(c, res.getOrDefault(c, 0) + 1);
-            }
-        }
-        return res;
     }
 
     public static void main(String[] args) {
