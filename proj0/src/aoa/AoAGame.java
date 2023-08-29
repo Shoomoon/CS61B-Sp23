@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class AoAGame {
-    private static final String DICTIONARY_FILE = "data/example.txt";
+    private static final String DICTIONARY_FILE = "data/sorted_scrabble.txt";
 
     public static void main(String[] args) throws FileNotFoundException {
         System.out.println("Welcome to the Awakening of Azathoth.");
@@ -23,8 +23,8 @@ public class AoAGame {
 
         // set up the the chooser and start the game
         Chooser chooser = new RandomChooser(wordLength, DICTIONARY_FILE);
-        Guesser guesser = new ConsoleGuesser(console);
-        //Guesser guesser = new PAGALetterFreqGuesser(DICTIONARY_FILE);
+        //Guesser guesser = new ConsoleGuesser(console);
+        Guesser guesser = new PAGALetterFreqGuesser(DICTIONARY_FILE);
         playGame(chooser, guesser, maxGuesses);
         showResults(chooser);
     }
@@ -74,6 +74,7 @@ public class AoAGame {
 
             while (count < 0) {
                 guess = getNextValidGuess(guesser, pattern, guesses);
+//                System.out.println("Letter guessed this round : " + guess);
                 guesses.add(guess);
                 count = chooser.makeGuess(guess);
                 if (count == 0) {
