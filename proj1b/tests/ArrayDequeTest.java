@@ -1,7 +1,10 @@
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdRandom;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -9,14 +12,40 @@ import static com.google.common.truth.Truth.assertWithMessage;
 
 public class ArrayDequeTest {
     Deque<Integer> arr;
+    Deque<Integer> myarr;
+    final int FIXSIZE = 20;
     @BeforeEach
     void setUp() {
         arr = new ArrayDeque<>();
         arr.addLast(0);
         arr.addLast(1);
         arr.addLast(2);
+        myarr = new FixSizeArrayDeque<>(FIXSIZE);
+        myarr.addLast(0);
+        myarr.addLast(1);
+        myarr.addLast(2);
     }
 
+    @Test
+    void randomTest() {
+        for (int i = 0; i < FIXSIZE; i++) {
+            int k = StdRandom.uniform(4);
+            switch (k) {
+                case 0 -> {
+                    arr.addFirst(i);
+                    myarr.addFirst(i);
+                }
+                case 1 -> {
+                    arr.addLast(i);
+                    myarr.addLast(i);
+                }
+                case 2 -> assertThat(arr.removeFirst()).isEqualTo(myarr.removeFirst());
+                case 3 -> assertThat(arr.removeLast()).isEqualTo(myarr.removeLast());
+                default -> {}
+            }
+            assertThat(arr.toList()).isEqualTo(myarr.toList());
+        }
+    }
     @Test
     void addFirst() {
         arr.addFirst(3);

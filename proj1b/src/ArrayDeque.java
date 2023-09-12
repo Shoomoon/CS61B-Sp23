@@ -17,7 +17,7 @@ public class ArrayDeque<T> implements Deque<T>{
         if (upScale && _size == arr.size()) {
             arr.addAll(Collections.nCopies(_size, null));
             // if left part [0, head) < right part [head, _size),
-            // shift elements before head after the last element.
+            // shift elements [0, head) after the last element.
             // Otherwise, shift elements in [head, _size) to the end of the array [head + _size, 2 * _size)
             int begin = 0, end = head, newHead = head;
             if (head > _size - head) {
@@ -30,7 +30,7 @@ public class ArrayDeque<T> implements Deque<T>{
                 arr.set(i, null);
             }
             head = newHead;
-        } else if (!upScale && _size > INITIALSIZE && _size * 4 < arr.size()) {
+        } else if (!upScale && _size >= INITIALSIZE && _size * 4 < arr.size()) {
             List<T> newArr = new ArrayList<>();
             for (int i = 0; i < _size; i++) {
                 newArr.add(get(i));
@@ -88,11 +88,11 @@ public class ArrayDeque<T> implements Deque<T>{
         if (isEmpty()) {
             return null;
         }
+        reSize(false);
         T firstVal = get(0);
         set(0, null);
         head = getIndex(1);
         _size -= 1;
-        reSize(false);
         return firstVal;
     }
 
@@ -101,10 +101,10 @@ public class ArrayDeque<T> implements Deque<T>{
         if (isEmpty()) {
             return null;
         }
+        reSize(false);
         T lastVal = get(_size - 1);
         set(_size - 1, null);
         _size -= 1;
-        reSize(false);
         return lastVal;
     }
 
