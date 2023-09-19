@@ -4,10 +4,10 @@ import deque.ArrayDeque;
 import deque.Deque;
 
 public class HarpString extends InstrumentString {
-    private static final double DECAY = 0.996;
+    private static final double DECAY = 0.998;
     /* Create a harp string of the given frequency.  */
     public HarpString(double frequency) {
-        super(frequency / 2.0, DECAY);
+        super(frequency * 2, DECAY);
     }
 
     /* Advance the simulation one time step by performing one iteration of

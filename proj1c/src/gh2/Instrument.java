@@ -61,7 +61,16 @@ public class Instrument {
             drumStrings.add(new DrumString(freqCenterC * Math.pow(2, 2 * i / 12.0)));
         }
         Instrument drum = new Instrument(drumStrings, drumKeyboard);
+
+        // select an instrument ans play
         Instrument curInstrument = harp;
+        if (curInstrument.equals(guitar)) {
+            System.out.println("Guitar keyboard: " + guitarKeyboard);
+        } else if (curInstrument.equals(harp)) {
+            System.out.println("Harp keyboard: " + harpKeyboard);
+        } else {
+            System.out.println("Drum keyboard: " + drumKeyboard);
+        }
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char c = StdDraw.nextKeyTyped();
