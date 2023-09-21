@@ -17,6 +17,21 @@ class PercolationTest {
         p.open(1, 2);
         p.open(2, 3);
         p.open(3, 3);
+        try {
+            Percolation q = new Percolation(-1);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("Size N must be > 0!", e.getMessage());
+        }
+    }
+    @Test
+    void percolation() {
+        try {
+            Percolation q = new Percolation(-1);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("Size N must be > 0!", e.getMessage());
+        }
     }
     @Test
     void open() {
@@ -35,6 +50,30 @@ class PercolationTest {
                 }
             }
         }
+        try {
+            p.isOpen(-1, 0);
+            fail();
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("0 <= row < N and 0 <= col < N needed!", e.getMessage());
+        }
+        try {
+            p.isOpen(4, 0);
+            fail();
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("0 <= row < N and 0 <= col < N needed!", e.getMessage());
+        }
+        try {
+            p.isOpen(0, -1);
+            fail();
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("0 <= row < N and 0 <= col < N needed!", e.getMessage());
+        }
+        try {
+            p.isOpen(0, 4);
+            fail();
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("0 <= row < N and 0 <= col < N needed!", e.getMessage());
+        }
     }
 
     @Test
@@ -48,6 +87,31 @@ class PercolationTest {
                 }
             }
         }
+        try {
+            p.isFull(-1, 0);
+            fail();
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("0 <= row < N and 0 <= col < N needed!", e.getMessage());
+        }
+        try {
+            p.isFull(4, 0);
+            fail();
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("0 <= row < N and 0 <= col < N needed!", e.getMessage());
+        }
+        try {
+            p.isFull(0, -1);
+            fail();
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("0 <= row < N and 0 <= col < N needed!", e.getMessage());
+        }
+        try {
+            p.isFull(0, 4);
+            fail();
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("0 <= row < N and 0 <= col < N needed!", e.getMessage());
+        }
+        assertThrows(IndexOutOfBoundsException.class, () -> p.isFull(0, 4));
     }
 
     @Test
