@@ -1,6 +1,10 @@
 package ngordnet.ngrams;
 
+import edu.princeton.cs.algs4.In;
+
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An object that provides utility methods for making queries on the
@@ -17,12 +21,35 @@ public class NGramMap {
     private static final int MIN_YEAR = 1400;
     private static final int MAX_YEAR = 2100;
     // TODO: Add any necessary static/instance variables.
+    private final Map<String, TimeSeries> wordsCountHistory;
+    private final TimeSeries totalWordsCount;
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
     public NGramMap(String wordsFilename, String countsFilename) {
         // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
+        wordsCountHistory = new HashMap<>();
+        totalWordsCount = new TimeSeries();
+        In wordsFileIn = new In(wordsFilename);
+        while (wordsFileIn.hasNextLine()) {
+            String word = wordsFileIn.readString();
+            int year = wordsFileIn.readInt();
+            double count = wordsFileIn.readDouble();
+            int distinctSources = wordsFileIn.readInt();
+            if (!wordsCountHistory.containsKey(word)) {
+                wordsCountHistory.put(word, new TimeSeries());
+            }
+            wordsCountHistory.get(word).put(year, count);
+        }
+        In countsFileIn = new In(countsFilename);
+        while (countsFileIn.hasNextLine()) {
+            String[] line = countsFileIn.readLine().split(",");
+            int year = Integer.parseInt(line[0]);
+            double count = Double.parseDouble(line[1]);
+            totalWordsCount.put(year, count);
+        }
+
     }
 
     /**
@@ -33,7 +60,7 @@ public class NGramMap {
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
         // TODO: Fill in this method.
-        return null;
+        return new TimeSeries(wordsCountHistory.getOrDefault(word, null), startYear, endYear);
     }
 
     /**
@@ -44,7 +71,7 @@ public class NGramMap {
      */
     public TimeSeries countHistory(String word) {
         // TODO: Fill in this method.
-        return null;
+        return countHistory(word, MIN_YEAR, MAX_YEAR);
     }
 
     /**
@@ -52,7 +79,7 @@ public class NGramMap {
      */
     public TimeSeries totalCountHistory() {
         // TODO: Fill in this method.
-        return null;
+        return new TimeSeries(totalWordsCount, MIN_YEAR, MAX_YEAR);
     }
 
     /**
@@ -61,7 +88,8 @@ public class NGramMap {
      */
     public TimeSeries weightHistory(String word, int startYear, int endYear) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries wordCountCut = countHistory(word, startYear, endYear);
+        return wordCountCut.dividedBy(totalWordsCount);
     }
 
     /**
@@ -71,7 +99,7 @@ public class NGramMap {
      */
     public TimeSeries weightHistory(String word) {
         // TODO: Fill in this method.
-        return null;
+        return weightHistory(word, MIN_YEAR, MAX_YEAR);
     }
 
     /**
@@ -82,7 +110,12 @@ public class NGramMap {
     public TimeSeries summedWeightHistory(Collection<String> words,
                                           int startYear, int endYear) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries selectedWordsCountCut = new TimeSeries();
+        for (String word: words) {
+            TimeSeries curWordCountCut = countHistory(word, startYear, endYear);
+            selectedWordsCountCut.roughPlus(curWordCountCut);
+        }
+        return selectedWordsCountCut.dividedBy(totalWordsCount);
     }
 
     /**
@@ -90,7 +123,15 @@ public class NGramMap {
      */
     public TimeSeries summedWeightHistory(Collection<String> words) {
         // TODO: Fill in this method.
-        return null;
+//        return summedWeightHistory(words, MIN_YEAR, MAX_YEAR);
+        TimeSeries selectedWordsCountCut = new TimeSeries();
+        for (String word: words) {
+            TimeSeries curWordCount = wordsCountHistory.getOrDefault(word, new TimeSeries());
+            for (int year: curWordCount.keySet()) {
+                selectedWordsCountCut.put(year, selectedWordsCountCut.getOrDefault(year, 0.0) + curWordCount.get(year));
+            }
+        }
+        return selectedWordsCountCut;
     }
 
     // TODO: Add any private helper methods.

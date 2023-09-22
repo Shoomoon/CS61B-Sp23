@@ -71,4 +71,31 @@ public class NGramMapTest {
         assertThat(fishPlusDogWeight.get(1865)).isWithin(1E-10).of(expectedFishPlusDogWeight1865);
     }
 
-}  
+    @Test
+    void countHistory() {
+    }
+
+    @Test
+    void testCountHistory1() {
+    }
+
+    @Test
+    void totalCountHistory() {
+    }
+
+    @Test
+    void weightHistory() {
+    }
+
+    @Test
+    void testWeightHistory() {
+    }
+
+    @Test
+    void summedWeightHistory() {
+    }
+
+    @Test
+    void testSummedWeightHistory() {
+    }
+}
