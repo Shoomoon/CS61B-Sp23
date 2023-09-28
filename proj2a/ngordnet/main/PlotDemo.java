@@ -23,6 +23,7 @@ public class PlotDemo {
         }
 
         XYChart chart = Plotter.generateTimeSeriesChart(words, lts);
+        Plotter.displayChart(chart);
         String s = Plotter.encodeChartAsString(chart);
         System.out.println(s);
 
