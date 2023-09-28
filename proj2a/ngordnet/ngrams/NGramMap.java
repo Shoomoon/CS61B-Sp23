@@ -5,6 +5,9 @@ import edu.princeton.cs.algs4.In;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
+import static org.junit.Assert.fail;
 
 /**
  * An object that provides utility methods for making queries on the
@@ -33,21 +36,29 @@ public class NGramMap {
         totalWordsCount = new TimeSeries();
         In wordsFileIn = new In(wordsFilename);
         while (wordsFileIn.hasNextLine()) {
-            String word = wordsFileIn.readString();
-            int year = wordsFileIn.readInt();
-            double count = wordsFileIn.readDouble();
-            int distinctSources = wordsFileIn.readInt();
-            if (!wordsCountHistory.containsKey(word)) {
-                wordsCountHistory.put(word, new TimeSeries());
+            try {
+                String word = wordsFileIn.readString();
+                int year = wordsFileIn.readInt();
+                double count = wordsFileIn.readDouble();
+                int distinctSources = wordsFileIn.readInt();
+                if (!wordsCountHistory.containsKey(word)) {
+                    wordsCountHistory.put(word, new TimeSeries());
+                }
+                wordsCountHistory.get(word).put(year, count);
+            } catch (NoSuchElementException e) {
+//                System.out.println(e.getMessage());
             }
-            wordsCountHistory.get(word).put(year, count);
         }
         In countsFileIn = new In(countsFilename);
         while (countsFileIn.hasNextLine()) {
-            String[] line = countsFileIn.readLine().split(",");
-            int year = Integer.parseInt(line[0]);
-            double count = Double.parseDouble(line[1]);
-            totalWordsCount.put(year, count);
+            try {
+                String[] line = countsFileIn.readLine().split(",");
+                int year = Integer.parseInt(line[0]);
+                double count = Double.parseDouble(line[1]);
+                totalWordsCount.put(year, count);
+            } catch (NumberFormatException e) {
+//                System.out.println(e.getMessage());
+            }
         }
 
     }
@@ -131,7 +142,7 @@ public class NGramMap {
                 selectedWordsCountCut.put(year, selectedWordsCountCut.getOrDefault(year, 0.0) + curWordCount.get(year));
             }
         }
-        return selectedWordsCountCut;
+        return selectedWordsCountCut.dividedBy(totalWordsCount);
     }
 
     // TODO: Add any private helper methods.

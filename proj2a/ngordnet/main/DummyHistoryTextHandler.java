@@ -3,6 +3,7 @@ package ngordnet.main;
 import ngordnet.browser.NgordnetQuery;
 import ngordnet.browser.NgordnetQueryHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DummyHistoryTextHandler extends NgordnetQueryHandler {

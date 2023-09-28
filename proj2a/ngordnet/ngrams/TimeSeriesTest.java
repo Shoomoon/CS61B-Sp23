@@ -160,4 +160,14 @@ public class TimeSeriesTest {
             assertThat(divideCatByDog2ValueExcepted.get(i)).isWithin(divideCayByDog2.get(year));
         }
     }
+
+    @Test
+    void roughPlus() {
+    }
+
+    @Test
+    void testToString() {
+        System.out.print(dogPopulation.toString());
+        assertThat(dogPopulation.toString()).isEqualTo("{1994=400.0, 1995=500.0}");
+    }
 }
