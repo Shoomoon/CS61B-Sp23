@@ -6,42 +6,41 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class DirectedGraphTest {
-    DirectedGraph graph;
+    DirectedGraph<SynsetNode> graph;
 
     @BeforeEach
     void setUp() {
-        graph = new DirectedGraph();
+        graph = new DirectedGraph<>();
         SynsetNode cat = new SynsetNode("0, cat, animal cat");
         SynsetNode dog = new SynsetNode("1,  dog goat, animal dog");
         SynsetNode cow = new SynsetNode("2, cow   bull, animal cow");
         SynsetNode sheep = new SynsetNode("3, sheep goat  cat, animal sheep");
-        graph.addNode(cat);
-        graph.addNode(dog);
-        graph.addNode(cow);
-        graph.addNode(sheep);
-        graph.addEdge(0, 1);
-        graph.addEdge(2, 3);
+        graph.addNode(0, cat);
+        graph.addNode(1, dog);
+        graph.addNode(2, cow);
+        graph.addNode(3, sheep);
+        graph.addDirectedEdge(0, 1);
+        graph.addDirectedEdge(2, 3);
 
     }
 
     @Test
-    void addEdge() {
+    void testGetChildrenIds() {
         assertThat(graph.getChildrenIds(0)).isEqualTo(List.of(1));
         assertThat(graph.getChildrenIds(1)).isEmpty();
         assertThat(graph.getChildrenIds(2)).isEqualTo(List.of(3));
         assertThat(graph.getChildrenIds(3)).isEmpty();
     }
 
+
     @Test
-    void addNode() {
-        assertThat(graph.getNodeIdsByWord("cat")).isEqualTo(List.of(0, 3));
-        assertThat(graph.getNodeIdsByWord("dog")).isEqualTo(List.of(1));
-        assertThat(graph.getNodeIdsByWord("cow")).isEqualTo(List.of(2));
-        assertThat(graph.getNodeIdsByWord("bull")).isEqualTo(List.of(2));
-        assertThat(graph.getNodeIdsByWord("sheep")).isEqualTo(List.of(3));
-        assertThat(graph.getNodeIdsByWord("goat")).isEqualTo(List.of(1, 3));
+    void testTraversal() {
+        assertThat(graph.traversal(0)).isEqualTo(List.of(graph.getNode(0), graph.getNode(1)));
+        assertThat(graph.traversal(1)).isEqualTo(List.of(graph.getNode(1)));
+        assertThat(graph.traversal(2)).isEqualTo(List.of(graph.getNode(2), graph.getNode(3)));
+        assertThat(graph.traversal(3)).isEqualTo(List.of(graph.getNode(3)));
+
     }
 }

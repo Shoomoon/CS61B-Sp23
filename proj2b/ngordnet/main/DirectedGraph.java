@@ -2,38 +2,51 @@ package ngordnet.main;
 
 import java.util.*;
 
-public class DirectedGraph {
-    private Map<Integer, SynsetNode> nodes;
-    private Map<String, Set<Integer>> wordToIdMap;
+public class DirectedGraph<T> {
+    private Map<Integer, T> nodes;
     private Map<Integer, Set<Integer>> edges;
     public DirectedGraph() {
         nodes = new HashMap<>();
-        wordToIdMap = new HashMap<>();
         edges = new HashMap<>();
     }
-    public void addEdge(int parentId, int childId) {
+    public void addDirectedEdge(int parentId, int childId) {
         if (!edges.containsKey(parentId)) {
             edges.put(parentId, new HashSet<>());
         }
         edges.get(parentId).add(childId);
     }
-    public void addNode(SynsetNode node) {
-        int id = node.getId();
+    public void addNode(int id, T node) {
         if (nodes.containsKey(id)) {
             throw new IllegalArgumentException(String.format("Redundant node id: %d", id));
         }
         nodes.put(id, node);
-        for (String synonym: node.getSynonyms()) {
-            if (!wordToIdMap.containsKey(synonym)) {
-                wordToIdMap.put(synonym, new HashSet<>());
-            }
-            wordToIdMap.get(synonym).add(id);
-        }
+    }
+    public T getNode(int id) {
+        return nodes.get(id);
     }
     public List<Integer> getChildrenIds(int parentId) {
         return new ArrayList<>(edges.getOrDefault(parentId, new HashSet<>()));
     }
-    public List<Integer> getNodeIdsByWord(String word) {
-        return new ArrayList<>(wordToIdMap.getOrDefault(word, new HashSet<>()));
+    public List<T> traversal(Collection<Integer> rootIds) {
+        List<T> nodesTraversal = new ArrayList<>();
+        Set<Integer> visitedNodesId = new HashSet<>();
+        for (int rootId: rootIds) {
+            nodesTraversal.add(getNode(rootId));
+            visitedNodesId.add(rootId);
+            traversalHelper(nodesTraversal, visitedNodesId, rootId);
+        }
+        return nodesTraversal;
+    }
+    public List<T> traversal(int rootId) {
+        return traversal(Set.of(rootId));
+    }
+    private void traversalHelper(List<T> traversalOrder, Set<Integer> visited, int curNodeId) {
+        for (int childId: getChildrenIds(curNodeId)) {
+            if (!visited.contains(childId)) {
+                traversalOrder.add(getNode(childId));
+                visited.add(childId);
+                traversalHelper(traversalOrder, visited, childId);
+            }
+        }
     }
 }
