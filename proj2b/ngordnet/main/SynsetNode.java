@@ -8,9 +8,9 @@ public class SynsetNode {
     private final String definition;
 
     public SynsetNode(String item) {
-        String[] s = item.split(", ?");
+        String[] s = item.split(", ?", 3);
         if (s.length != 3) {
-            throw new IllegalArgumentException("Invalid synsets!");
+            throw new IllegalArgumentException("Invalid synset: " + item +"\n");
         }
         id = Integer.parseInt(s[0]);
         synonyms = Arrays.stream(s[1].trim().split(" +")).toList();
